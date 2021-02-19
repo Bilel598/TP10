@@ -1,8 +1,6 @@
 package ecole;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +20,17 @@ public class Classe {
             Eleve eleve = new Eleve(this.nomClasse);
             listeEleve.add(eleve);
         }
+
+    }
+
+    public void getStats(){
+        getListeNoteClasse();
+        System.out.println("Pour la classe de " + nomClasse + ": ");
+        listeNoteClasse.forEach((key, value) -> {
+            DoubleSummaryStatistics stats = listeNoteClasse.get(key).stream().mapToDouble((x) -> x).summaryStatistics();
+            System.out.println(key.toString() + ": " + " Minimum: " + stats.getMin() + "; Valeur moyenne: " + stats.getAverage() + "; Maximum" + stats.getMax() + "; Nombre total de notes: " + stats.getCount());
+
+        });
     }
 
 

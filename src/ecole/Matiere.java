@@ -10,10 +10,10 @@ public enum Matiere {
     ART,
     MUSIQUE,
     SPORT,
-    LANGUE_VIVANTE;
+    LANGUE_VIVANTE
 
 }
-enum matiereOptionnel {
+enum MatiereOptionnel {
         LATIN,
         GREC,
         ANGLAIS_AVANCE

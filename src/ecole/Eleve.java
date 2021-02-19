@@ -2,9 +2,7 @@ package ecole;
 
 import com.github.javafaker.Faker;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Eleve {
 
@@ -12,6 +10,9 @@ public class Eleve {
     private String prenom;
     private String classe;
     private HashMap<Matiere, List<Double>> listeNote = new HashMap<>();
+    private HashMap<MatiereOptionnel, List<Double>> listeNoteOptions = new HashMap<>();
+
+    private double moyenneGenerale;
 
     public Eleve(String classe) {
         Faker faker = new Faker();
@@ -20,15 +21,13 @@ public class Eleve {
         this.classe = classe;
     }
 
-    public Double getMoyenneGenerale(){
-        final Double[] sommeMoyenne = {0.0};
-        listeNote.forEach( (matiere, notes) -> {
-            sommeMoyenne[0] += notes.get(notes.size() - 1);
-        });
-        System.out.println(sommeMoyenne[0]/9);
-        return 0.0;
+    public double getMoyenneGenerale() {
+        return moyenneGenerale;
     }
 
+    public void setMoyenneGenerale(double moyenneGenerale) {
+        this.moyenneGenerale = moyenneGenerale;
+    }
 
     public String getPrenom() {
         return prenom;
@@ -60,12 +59,31 @@ public class Eleve {
 
     public void setListeNote(Matiere matiere, List<Double> notes) {
         listeNote.put(matiere, notes);
+        Double sommeMoyenne = 0.0;
+        for(Map.Entry matiereEntry : listeNote.entrySet()) {
+            sommeMoyenne += listeNote.get(matiereEntry.getKey()).get(listeNote.get(matiereEntry.getKey()).size() - 1);
+        }
+        this.moyenneGenerale = this.classe.equals("SIXIEME") ?  sommeMoyenne/8 : sommeMoyenne/10;
+    }
+
+    public void setListeNoteOptions(MatiereOptionnel mat, List<Double> notes) {
+        listeNoteOptions.put(mat, notes);
+        Double moyenne;
+
+        for(Map.Entry matiereEntry : listeNoteOptions.entrySet()) {
+            moyenne = listeNoteOptions.get(matiereEntry.getKey()).get(listeNoteOptions.get(matiereEntry.getKey()).size() - 1);
+            this.moyenneGenerale += 0.1 * (10 - moyenne);
+        }
     }
 
     public void afficherEleve(){
         System.out.println("\n" + nom + ' ' + prenom + " en " + classe);
-        for(Matiere m : Matiere.values()) {
-            System.out.println(m.toString() + listeNote.get(m) + ", ");
+        for(Map.Entry matiereEntry : listeNote.entrySet()) {
+            System.out.println(matiereEntry.getKey().toString() + matiereEntry.getValue() + ", ");
         }
+        for(Map.Entry matiereEntry : listeNoteOptions.entrySet()) {
+            System.out.println(matiereEntry.getKey().toString() + matiereEntry.getValue() + ", ");
+        }
+        System.out.println("Moyenne générale: " + moyenneGenerale);
     }
 }

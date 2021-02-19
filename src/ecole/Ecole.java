@@ -1,8 +1,8 @@
 package ecole;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Ecole {
     private String nomEcole;
@@ -19,10 +19,12 @@ public class Ecole {
     }
 
     public void genererNotes(){
+        Random rd = new Random();
         for (Classe classe : this.listeDesClasse) {
             for (Eleve eleve : classe.getListeEleve()) {
                 int matiereAleatoire = (int) (Math.random() * 3);
                 ArrayList<Matiere> matieres = new ArrayList<>(Arrays.asList(Matiere.values()));
+                ArrayList<MatiereOptionnel> matieresOptionnel = new ArrayList<>(Arrays.asList(MatiereOptionnel.values()));
 
                 if(classe.getAnnee() == annee.SIXIEME) {
                     matieres.remove(Matiere.LANGUE_VIVANTE);
@@ -39,11 +41,29 @@ public class Ecole {
                     }
                     notes.add(Math.round(somme / notes.size() * 100.0) / 100.0);
                     eleve.setListeNote(matiere, notes);
-                    // Trouver la solution pour extend le enum pour rajouter les matieres optionnel
                 }
-                System.out.println(eleve.getListeNote().toString() + eleve.getMoyenneGenerale());
+                if (rd.nextBoolean()) {
+                   List<Double> notesOptions = new ArrayList<>();
+                   Double sommeOptions = 0.0;
+                   for(int i=0; i < 3; i++) {
+                       notesOptions.add(Math.round(Math.random() * (21) * 100.0) / 100.0);
+                       sommeOptions += notesOptions.get(i);
+                   }
+                    notesOptions.add(Math.round(sommeOptions / notesOptions.size() * 100.0) / 100.0);
+                    eleve.setListeNoteOptions(MatiereOptionnel.ANGLAIS_AVANCE, notesOptions);
+                }
+                if (rd.nextBoolean()) {
+                    List<Double> notesOptions = new ArrayList<>();
+                    Double sommeOptions = 0.0;
+                    for(int i=0; i < 3; i++) {
+                        notesOptions.add(Math.round(Math.random() * (21) * 100.0) / 100.0);
+                        sommeOptions += notesOptions.get(i);
+                    }
+                    notesOptions.add(Math.round(sommeOptions / notesOptions.size() * 100.0) / 100.0);
+                    eleve.setListeNoteOptions(rd.nextBoolean() ? MatiereOptionnel.GREC : MatiereOptionnel.LATIN, notesOptions);
+                }
             }
-            //System.out.println(classe.getListeNoteClasse());
+            classe.getStats();
         }
     }
 
@@ -53,6 +73,16 @@ public class Ecole {
 
     public void setListeDesClasse(ArrayList<Classe> listeDesClasse) {
         this.listeDesClasse = listeDesClasse;
+    }
+    public HashMap<Matiere, List<Double>> getListeNoteAnnee(annee annee) {
+        HashMap<Matiere, List<Double>> listeNoteAnnee = new HashMap<>();
+        ArrayList<Classe> listeDesClasseAnnee = new ArrayList<>(listeDesClasse);
+        listeDesClasseAnnee.removeIf(classe -> (classe.getAnnee() != annee));
+
+        for(Classe classe : listeDesClasseAnnee) {
+            classe.getListeNoteClasse().forEach( (matiere, note) -> listeNoteAnnee.merge(matiere, note, (v1, v2) -> Stream.concat(v1.stream(), v2.stream()).collect(Collectors.toList())));
+        }
+        return listeNoteAnnee;
     }
 
     public String getNomEcole() {
