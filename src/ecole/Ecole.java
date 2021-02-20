@@ -7,11 +7,12 @@ import java.util.stream.Stream;
 public class Ecole {
     private String nomEcole;
     private ArrayList<Classe> listeDesClasse;
+    private static Ecole instance;
 
     public Ecole(String name){
         this.nomEcole = name;
         this.listeDesClasse = new ArrayList<>();
-        for (annee annee : annee.values()){
+        for (Annee annee : Annee.values()){
             for(char alphabet = 'A'; alphabet <='F'; alphabet++ ) {
                 listeDesClasse.add(new Classe(annee, String.valueOf(alphabet)));
             }
@@ -24,9 +25,8 @@ public class Ecole {
             for (Eleve eleve : classe.getListeEleve()) {
                 int matiereAleatoire = (int) (Math.random() * 3);
                 ArrayList<Matiere> matieres = new ArrayList<>(Arrays.asList(Matiere.values()));
-                ArrayList<MatiereOptionnel> matieresOptionnel = new ArrayList<>(Arrays.asList(MatiereOptionnel.values()));
 
-                if(classe.getAnnee() == annee.SIXIEME) {
+                if(classe.getAnnee() == Annee.SIXIEME) {
                     matieres.remove(Matiere.LANGUE_VIVANTE);
                     matieres.remove(Matiere.PHYSIQUE);
                 }
@@ -74,7 +74,7 @@ public class Ecole {
     public void setListeDesClasse(ArrayList<Classe> listeDesClasse) {
         this.listeDesClasse = listeDesClasse;
     }
-    public HashMap<Matiere, List<Double>> getListeNoteAnnee(annee annee) {
+    public HashMap<Matiere, List<Double>> getListeNoteAnnee(Annee annee) {
         HashMap<Matiere, List<Double>> listeNoteAnnee = new HashMap<>();
         ArrayList<Classe> listeDesClasseAnnee = new ArrayList<>(listeDesClasse);
         listeDesClasseAnnee.removeIf(classe -> (classe.getAnnee() != annee));
@@ -93,4 +93,10 @@ public class Ecole {
         this.nomEcole = nomEcole;
     }
 
+    public static Ecole getInstance() {
+        if(Ecole.instance == null) {
+            Ecole.instance = new Ecole("isen");
+        }
+        return instance;
+    }
 }

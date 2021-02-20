@@ -6,12 +6,12 @@ import java.util.stream.Stream;
 
 public class Classe {
     private String nomClasse;
-    private annee annee;
+    private Annee annee;
     private ArrayList<Eleve> listeEleve;
     private HashMap<Matiere, List<Double>> listeNoteClasse = new HashMap<>();
 
 
-    public Classe(annee annee, String nomClasse){
+    public Classe(Annee annee, String nomClasse){
         this.nomClasse = annee + nomClasse;
         this.annee = annee;
         this.listeEleve = new ArrayList<>();
@@ -33,6 +33,10 @@ public class Classe {
         });
     }
 
+    public Double getMoyenneMatiere(Matiere matiere) {
+        DoubleSummaryStatistics stats = listeNoteClasse.get(matiere).stream().mapToDouble((x) -> x).summaryStatistics();
+        return stats.getAverage();
+    }
 
     public HashMap<Matiere, List<Double>> getListeNoteClasse() {
 
@@ -56,11 +60,11 @@ public class Classe {
         this.nomClasse = nomClasse;
     }
 
-    public ecole.annee getAnnee() {
+    public Annee getAnnee() {
         return annee;
     }
 
-    public void setAnnee(ecole.annee annee) {
+    public void setAnnee(Annee annee) {
         this.annee = annee;
     }
 
@@ -76,11 +80,4 @@ public class Classe {
     public String toString() {
         return nomClasse + '\'' + ", annee=" + annee + "\n";
     }
-}
-
-enum annee {
-    SIXIEME,
-    CINQUIEME,
-    QUATRIEME,
-    TROISIEME
 }
