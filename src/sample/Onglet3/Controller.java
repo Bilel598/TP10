@@ -43,7 +43,6 @@ public class Controller implements Initializable {//NOPMD
             final XYChart.Series dataSeries = new XYChart.Series();
             dataSeries.setName(selectionMatiere.getValue().toString());
 
-            barChart.setTitle("Moyennes en " + selectionMatiere);
 
             for (Annee annee : Annee.values()) {
                 ArrayList<Classe> classes = new ArrayList<>(isen.getListeDesClasse());

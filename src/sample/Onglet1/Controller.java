@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 
 import java.net.URL;
@@ -24,9 +23,6 @@ public class Controller implements Initializable {
 
     @FXML
     private transient ComboBox<Matiere> selectionMatiere;
-
-    @FXML
-    private transient CheckBox addCheckBox;
 
     @FXML
     private transient BarChart<String, Number> chart;
@@ -44,35 +40,24 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void addBtn() {//NOPMD
-        displayChart(addCheckBox.isSelected());
-    }
-
-    @FXML
-    private void clearBtn() {//NOPMD//NOPMD
+    private void displayChart() {
         chart.getData().clear();
-    }
-
-    private void displayChart(final boolean add) {
-        if (!add) {
-            chart.getData().clear();
-            chart.getData().clear();
-        }
+        chart.getData().clear();
 
         if (selectionMatiere.getValue() != null && selectionAnnee.getValue() != null) {
 
-            final XYChart.Series dataSeries1 = new XYChart.Series();
-            dataSeries1.setName(selectionMatiere.getValue().toString());
+            final XYChart.Series dataSeries = new XYChart.Series();
+            dataSeries.setName(selectionMatiere.getValue().toString());
 
             ArrayList<Classe> classes = new ArrayList<>(isen.getListeDesClasse());
             classes.removeIf(classe -> (classe.getAnnee() != selectionAnnee.getValue()));
 
             classes.forEach((Classe classe) -> {
-                dataSeries1.getData().add(new XYChart.Data(classe.getNomClasse(), classe.getMoyenneMatiere(selectionMatiere.getValue())));
+                dataSeries.getData().add(new XYChart.Data(classe.getNomClasse(), classe.getMoyenneMatiere(selectionMatiere.getValue())));
             });
 
 
-            chart.getData().add(dataSeries1);
+            chart.getData().add(dataSeries);
         }
     }
 }

@@ -1,4 +1,4 @@
-package sample.Onglet4;
+package sample.Onglet2;
 
 import ecole.*;
 import javafx.fxml.FXML;
@@ -19,12 +19,26 @@ public class Controller implements Initializable {
     private transient ComboBox<Annee> selectionAnnee;
 
     @FXML
+    private transient ComboBox<Matiere> selectionMatiere;
+
+    @FXML
+    private transient ComboBox<Number> selectionNote;
+
+    @FXML
     private transient BarChart<String, Number> barChart;
 
     @Override
     public void initialize(final URL url, final ResourceBundle resourceBundle) {
         for (Annee annee : Annee.values()) {
             selectionAnnee.getItems().add(annee);
+        }
+
+        for (Matiere matiere : Matiere.values()) {
+            selectionMatiere.getItems().add(matiere);
+        }
+        selectionNote.getItems().addAll(1,2);
+        if (selectionMatiere.getValue() == (Matiere.SPORT) || selectionMatiere.getValue() == (Matiere.MUSIQUE)) {
+            selectionNote.getItems().add(3);
         }
     }
 
@@ -43,12 +57,9 @@ public class Controller implements Initializable {
 
 
             classes.forEach((Classe classe) -> {
-                double moyenne = 0.0;
-                for (Eleve eleve: classe.getListeEleve()) {
-                    moyenne += eleve.getMoyenneGenerale();
+                for(Eleve eleve: classe.getListeEleve()) {
+                    dataSeries.getData().add(new XYChart.Data(classe.getNomClasse(), eleve.getListeNote().get(selectionMatiere.getValue()).get((selectionNote.getValue().intValue()))));
                 }
-                dataSeries.getData().add(new XYChart.Data(classe.getNomClasse(), moyenne/20));
-
             });
             barChart.getData().add(dataSeries);
         }
