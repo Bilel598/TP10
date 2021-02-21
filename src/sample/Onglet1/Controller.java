@@ -50,7 +50,7 @@ public class Controller implements Initializable {
         if (selectionMatiere.getValue() != null && selectionAnnee.getValue() != null) {
 
             final XYChart.Series dataSeries = new XYChart.Series();
-            dataSeries.setName(selectionMatiere.getValue().toString());
+            dataSeries.setName(selectionMatiere.getValue());
 
             ArrayList<JSONObject> classes = new ArrayList<>();
             for (int i = 0; i < classesJSON.length(); i++) {
@@ -60,7 +60,7 @@ public class Controller implements Initializable {
             }
 
             for (JSONObject classe : classes) {
-                Double sum = 0.0;
+                double sum = 0.0;
                 JSONArray noteJson = (JSONArray) classe.getJSONObject("listeNoteClasse").get(selectionMatiere.getValue());
                 for (int i =0; i < noteJson.toList().size(); i++) {
                     sum += noteJson.getDouble(i);

@@ -53,7 +53,7 @@ public class Controller implements Initializable {
         if (selectionAnnee.getValue() != null) {
 
             final XYChart.Series dataSeries = new XYChart.Series();
-            dataSeries.setName(selectionAnnee.getValue().toString());
+            dataSeries.setName(selectionAnnee.getValue());
 
             ArrayList<JSONObject> classes = new ArrayList<>();
             for (int i = 0; i < classesJSON.length(); i++) {
@@ -64,13 +64,9 @@ public class Controller implements Initializable {
 
             for (JSONObject classe : classes) {
                 JSONArray eleves = classe.getJSONArray("listeEleve");
-                System.out.println("-------------");
                 for (int i = 0; i < eleves.length(); i++) {
-                    System.out.println(eleves.getJSONObject(i).getDouble("moyenneGenerale"));
-
+                    dataSeries.getData().add(new XYChart.Data(classe.getString("nomClasse"), eleves.getJSONObject(i).getJSONObject("listeNote").getJSONArray("ART").getDouble(selectionNote.getValue().intValue())));
                 }
-                    //System.out.println(eleve.getJSONObject("listeNote").getJSONArray(selectionMatiere.getValue()).get(selectionNote.getValue().intValue()));
-                    //dataSeries.getData().add(new XYChart.Data(classe.getString("nomClasse"), eleve.getJSONObject("listeNote").getJSONArray(selectionMatiere.getValue()).get(selectionNote.getValue().intValue())));
 
             }
 

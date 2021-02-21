@@ -11,7 +11,6 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -53,22 +52,26 @@ public class Controller implements Initializable {
                 annees.add(anneesJson.get(i).toString());
             }
 
-            for (String annee : annees) {
+            for (String ignored : annees) {
                 ArrayList<JSONObject> classes = new ArrayList<>();
                 for (int i = 0; i < classesJSON.length(); i++) {
                     classes.add((JSONObject) classesJSON.get(i));
                 }
+                for (JSONObject classe : classes) {
+                    double sum = 0.0;
+                    double moy = 0.0;
+                    JSONArray noteJson = (JSONArray) classe.getJSONObject("listeNoteClasse").get(selectionMatiere.getValue());
+                    for (int i =0; i < noteJson.toList().size(); i++) {
+                        sum += noteJson.getDouble(i);
+                    }
 
-                Double sum = 0.0;
-                JSONArray noteJson = (JSONArray) classe.getJSONObject("listeNoteClasse").get(selectionMatiere.getValue());
-                for (int i =0; i < noteJson.toList().size(); i++) {
-                    sum += noteJson.getDouble(i);
+                    moy += sum/ noteJson.toList().size();
+                    dataSeries.getData().add(new XYChart.Data(classe.getString("annee"), moy * 10));
+
                 }
-                final List<Double> moyennes = new ArrayList<>();
-                double moyenne = classes.stream().mapToDouble(classe -> classe.getJSONObject("listeNoteClasse").get(selectionMatiere.getValue())).average().getAsDouble();
 
 
-                //dataSeries.getData().add(new XYChart.Data(annee.toString(), moyenne));
+
             }
             barChart.getData().add(dataSeries);
         }

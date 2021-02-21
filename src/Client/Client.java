@@ -10,7 +10,6 @@ import java.net.Socket;
 public class Client {
 
     Socket s1=null;
-    String line=null;
     BufferedReader br=null;
     BufferedReader is=null;
     PrintWriter os=null;
@@ -46,6 +45,7 @@ public class Client {
             System.out.println("Socket read Error");
         }
 
+        assert response != null;
         return new JSONArray(response);
     }
 

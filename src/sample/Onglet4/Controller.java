@@ -1,7 +1,6 @@
 package sample.Onglet4;
 
 import Client.Client;
-import ecole.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
@@ -43,7 +42,7 @@ public class Controller implements Initializable {
         if (selectionAnnee.getValue() != null) {
 
             final XYChart.Series dataSeries = new XYChart.Series();
-            dataSeries.setName(selectionAnnee.getValue().toString());
+            dataSeries.setName(selectionAnnee.getValue());
 
             ArrayList<JSONObject> classes = new ArrayList<>();
             for (int i = 0; i < classesJSON.length(); i++) {
